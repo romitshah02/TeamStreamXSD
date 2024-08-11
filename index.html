@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeamStreamRouter</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+
+<!-- Make sure you put this AFTER Leaflet's CSS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+crossorigin=""></script>
+<script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+<style>
+    
+    header{
+        margin: 50px 0px 0px 0px;
+        display: flex;
+        justify-content: center;
+        font-size: 2rem;
+        font-weight: 700;
+    }
+    #map{
+        width: 100%;
+        height: 85vh;
+    }
+</style>
+<script>
+
+    if ('geolocation' in navigator){
+    navigator.geolocation.getCurrentPosition(pos=>{
+        console.log(pos.coords);
+        var map = L.map('map').setView([pos.coords.latitude, pos.coords.longitude], 13);
+                    L.tileLayer('https://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+                        attribution: "OSM"
+                    }).addTo(map);
+
+                    L.marker([pos.coords.latitude, pos.coords.longitude]).addTo(map)
+                        .bindPopup('You are here')
+                        .openPopup();
+
+
+            map.on('click', function (e) {
+			console.log(e)
+			var newMarker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(map);
+			L.Routing.control({
+				waypoints: [
+					L.latLng(pos.coords.latitude, pos.coords.longitude),
+					L.latLng(e.latlng.lat, e.latlng.lng)
+				]
+			}).on('routesfound', function (e) {
+				var routes = e.routes;
+				console.log(routes);
+				e.routes[0].coordinates.forEach(function (coord, index) {
+					setTimeout(function () {
+						marker.setLatLng([coord.lat, coord.lng]);
+					}, 100 * index)
+				})
+
+			}).addTo(map);
+		});
+            
+            
+    },error => {
+        console.log(pos.coords);
+          // Display the map
+        var map = L.map('map').setView([12.93458, 77.60578 ], 13);
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    }).addTo(map);
+                    L.marker([12.93458, 77.60578 ]).addTo(map)
+                        .bindPopup('You are here')
+                        .openPopup();
+    }
+);
+    } else{
+    console.log("No geo location object available");
+    }
+    </script>
+</head>
+<body>
+    <header>TeamStream Map Router</header>
+    <div class="Map" id="map">
+    </div>
+</body>
+</html>

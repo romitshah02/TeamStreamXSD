@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:element name="employees" type="employeesType"/>
+    <xs:complexType  name="employeesType">
+      <xs:sequence>
+        <xs:element name="employee" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="firstname" type="xs:string"/>
+              <xs:element name="lastname" type="xs:string"/>
+              <xs:element name="email" type="xs:string"/>
+              <xs:element name="phone_no">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="\d{3}-\d{3}-\d{4}" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="position" type="xs:string"/>
+              <xs:element name="salary">
+                <xs:simpleType>
+                    <xs:restriction base="xs:integer"> 
+                        <xs:minInclusive value="5000"></xs:minInclusive>
+                        <xs:maxInclusive value="100000"></xs:maxInclusive>
+                    </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="department_id" type="xs:integer"/>
+            </xs:sequence>
+            <xs:attribute name="id" type="xs:string" use="required"/>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+
+</xs:schema>

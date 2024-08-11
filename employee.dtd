@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!ELEMENT employees (employee+)>
+<!ELEMENT employee (firstname,lastname,email,phone_no,position,salary,department_id)>
+<!ELEMENT firstname (#PCDATA)>
+<!ELEMENT lastname (#PCDATA)>
+<!ELEMENT email (#PCDATA)>
+<!ELEMENT phone_no (#PCDATA)>
+<!ELEMENT position (#PCDATA)>
+<!ELEMENT salary (#PCDATA)>
+<!ELEMENT department_id (#PCDATA)>
+
+<!ATTLIST employee id ID #REQUIRED>
